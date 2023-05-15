@@ -167,6 +167,48 @@ public class BaseSortTest {
      * @param low
      * @param high
      */
+    private static void quickSort2(int[] a, int low, int high) {
+        if (low >= high) {
+            return;
+        }
+        int first = low;
+        int last = high;
+        int sw = a[first];
+
+        while (first < last) {
+            while (first < last && a[last] > sw) {
+                last--;
+            }
+            if (first < last) {
+                a[first++] = a[last];
+            }
+
+            while (first < last && a[first] < sw ) {
+                first ++;
+            }
+            if (first < last) {
+                a[last --] = a[first];
+            }
+        }
+
+        a[first] = sw;
+
+        quickSort2(a, low, first - 1);
+        quickSort2(a, first + 1, high);
+    }
+
+    /**
+     * 快速排序：非稳定排序、平均时间复杂度O(nlog(n))、最差空间复杂度O(log(n))
+     * <p></p>
+     * 递归方式，将数组中第一个数放在中间位置上，然后将数组根据这个中间数分成两个数组，递归调用两端数组排序，直到两端数组不需要排序。
+     *
+     * 1、选取第一个元素当成基准数
+     * 2、将比基准数大的放后边，基准数小的放前边
+     * 3、递归调用，基准数左右两端的数组。直到数组个数为1
+     * @param a
+     * @param low
+     * @param high
+     */
     private static void quickSort(int[] a, int low, int high) {
         //[5,1,3,6,10,2]
         //如果低位角标不再小于高位角标时，不需要再进行排序
