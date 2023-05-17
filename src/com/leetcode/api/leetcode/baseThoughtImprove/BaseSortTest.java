@@ -18,7 +18,7 @@ public class BaseSortTest {
 
 
     /**
-     * 冒泡：稳定排序、原地排序、时间复杂度O(n^2) 、空间复杂度O(1)
+     * 一、冒泡：稳定排序、原地排序、时间复杂度O(n^2) 、空间复杂度O(1)
      * <p></>
      * 将最大或者最小的数放到数组最后
      *
@@ -52,7 +52,7 @@ public class BaseSortTest {
     }
 
     /**
-     * 选择排序：非稳定排序、原地排序、时间复杂度O(n^2）、空间复杂度O(1)
+     * 二、选择排序：非稳定排序、原地排序、时间复杂度O(n^2）、空间复杂度O(1)
      * <p></p>
      * 选择出数组中最小或最大的数，放在前边的角标位置，依次排序
      * 每次选出后续数组中最小的数，放在数组最前边。
@@ -79,7 +79,7 @@ public class BaseSortTest {
     }
 
     /**
-     * 插入排序：稳定排序、原地排序、时间复杂度O(n^2) 、空间复杂度O(1)
+     * 三、插入排序：稳定排序、原地排序、时间复杂度O(n^2) 、空间复杂度O(1)
      * <p></p>
      * 循环取出数组数据，将该数据默认插入到之前的数组中，默认将之前的数组看做有序数组
      *
@@ -110,7 +110,7 @@ public class BaseSortTest {
     }
 
     /**
-     * 希尔排序：非稳定性排序、原地排序、时间复杂度O(n^1.3 ~ 2)，空间复杂度O(1)
+     * 四、希尔排序：非稳定性排序、原地排序、时间复杂度O(n^1.3 ~ 2)，空间复杂度O(1)
      * <p></p>
      * 插入排序的变种，插入排序计算高效的优势在于：
      * 1、数组基本有序时
@@ -154,51 +154,8 @@ public class BaseSortTest {
         }
     }
 
-
     /**
-     * 快速排序：非稳定排序、平均时间复杂度O(nlog(n))、最差空间复杂度O(log(n))
-     * <p></p>
-     * 递归方式，将数组中第一个数放在中间位置上，然后将数组根据这个中间数分成两个数组，递归调用两端数组排序，直到两端数组不需要排序。
-     *
-     * 1、选取第一个元素当成基准数
-     * 2、将比基准数大的放后边，基准数小的放前边
-     * 3、递归调用，基准数左右两端的数组。直到数组个数为1
-     * @param a
-     * @param low
-     * @param high
-     */
-    private static void quickSort2(int[] a, int low, int high) {
-        if (low >= high) {
-            return;
-        }
-        int first = low;
-        int last = high;
-        int sw = a[first];
-
-        while (first < last) {
-            while (first < last && a[last] > sw) {
-                last--;
-            }
-            if (first < last) {
-                a[first++] = a[last];
-            }
-
-            while (first < last && a[first] < sw ) {
-                first ++;
-            }
-            if (first < last) {
-                a[last --] = a[first];
-            }
-        }
-
-        a[first] = sw;
-
-        quickSort2(a, low, first - 1);
-        quickSort2(a, first + 1, high);
-    }
-
-    /**
-     * 快速排序：非稳定排序、平均时间复杂度O(nlog(n))、最差空间复杂度O(log(n))
+     * 五、快速排序：非稳定排序、平均时间复杂度O(nlog(n))、最差空间复杂度O(log(n))
      * <p></p>
      * 递归方式，将数组中第一个数放在中间位置上，然后将数组根据这个中间数分成两个数组，递归调用两端数组排序，直到两端数组不需要排序。
      *
@@ -260,105 +217,8 @@ public class BaseSortTest {
     }
 
 
-
     /**
-     * 归并排序（分治法的典型案例）：稳定性排序、非原地排序、时间复杂度O(nlog(n))，空间复杂度O(n)
-     * <p></p>
-     * 循环将数组拆分为二，一直拆分到单独一个为一组，那么就肯定是有序的了。
-     * 然后将每一组进行合并，合并时比较大小后放到合并数组中。
-     */
-    private static int[] mergeSort(int[] arr, int start, int end) {
-        //当开始 == 结束角标，那么说明只剩下一个数据了，不需要再拆分了
-        if (start == end) {
-            return new int[]{arr[start]};
-        }
-        //从中间进行拆分
-        int mid = start + (end - start) / 2;
-        System.out.println(mid);
-        int[] leftArr = mergeSort(arr, start, mid);//左边数组
-        int[] rightArr = mergeSort(arr, mid + 1, end);//右边数组
-
-        int[] newArr = new int[leftArr.length + rightArr.length];//新数组
-        int nIndex = 0;
-        int lIndex = 0;
-        int rIndex = 0;
-        //当两端数组都有数据时，合并时，比较两端数据大小，小的先放到新数组中。
-        while (lIndex < leftArr.length && rIndex < rightArr.length) {
-            //两个数组中，小的数先放到newArr中。
-            newArr[nIndex++] = leftArr[lIndex] < rightArr[rIndex] ? leftArr[lIndex++] : rightArr[rIndex++];
-        }
-        //左边数组没有合并完，继续合并。如果数组元素是单数的时候，就可能会走到这个条件中。
-        while (lIndex < leftArr.length) {
-            newArr[nIndex++] = leftArr[lIndex++];
-        }
-        //右边数组没有合并完，继续合并。如果数组元素是单数的时候，就可能会走到这个条件中。
-        while (rIndex < rightArr.length) {
-            newArr[nIndex++] = rightArr[rIndex++];
-        }
-        return newArr;
-    }
-
-    /**
-     * 计数排序：稳定性排序，非原地排序，时间复杂度O(n + k)，空间复杂度O(n + k) k为整数的范围
-     * 只适合整数类型排序，非比较型排序
-     * <p></p>
-     * 原数组：{4, 1, 3, 0, -1}
-     * 1、计算数组最大值到最小值之间有多少个整数，并申请一个计数数组count[]
-     * 2、将数据的大小当做count数组的角标插入，如果同一个角标多一个就+1。转换完就等于将原数组的数据当成了count数组的角标存储了 [1, 1, 1, 0, 1, 1]
-     * 3、将count数组的值，依次加起来，就是原数组数据的排序了。只是这个排序的角标时从1开始的。[1, 2, 3, 3, 4, 5]
-     * 4、遍历原数组，通过count[]查找数据的角标位置。
-     *
-     * @return
-     */
-    private static int[] countSort(int[] arr) {
-        int[] result = new int[arr.length];
-        int max = arr[0], min = arr[0];
-        for (int value : arr) {
-            if (value > max) {
-                max = value;
-            }
-            if (value < min) {
-                min = value;
-            }
-        }
-        int k = max - min + 1;
-        int[] count = new int[k];
-        for (int value : arr) {
-            //将arr数据当成角标
-            int countIndex = value - min;
-            count[countIndex] += 1;
-        }
-        System.out.println(Arrays.toString(count));
-
-        //将count数组的值，转换成排序位置
-        for (int i = 1; i < count.length; i++) {
-            count[i] += count[i - 1];
-        }
-        System.out.println(Arrays.toString(count));
-
-        for (int i = arr.length - 1; i >= 0; i--) {//倒叙是为了保证稳定性
-            //源数据就是count的角标，而count的值对应的就是排序后的顺序，只是从1开始的。所以-1
-
-            //计算count数组的角标，这个角标就是源数据的值-min
-            int countIndex = arr[i] - min;
-            //通过count角标获取count数组的值，而这个值就是新数组的角标。
-            int rIndex = count[countIndex] - 1;
-            //这个arr[i]其实就是 countIndex + min
-            result[rIndex] = arr[i];
-        }
-
-        return result;
-    }
-
-    private static void swap(int[] arr, int source, int target) {
-        int tmp = arr[source];
-        arr[source] = arr[target];
-        arr[target] = tmp;
-    }
-
-
-    /**
-     * 堆排序
+     * 六、堆排序
      *
      * 口诀：
      * 最后一个非叶子结点：len / 2 - 1
@@ -417,6 +277,106 @@ public class BaseSortTest {
     }
 
 
+    /**
+     * 七、归并排序（分治法的典型案例）：稳定性排序、非原地排序、时间复杂度O(nlog(n))，空间复杂度O(n)
+     * <p></p>
+     * 循环将数组拆分为二，一直拆分到单独一个为一组，那么就肯定是有序的了。
+     * 然后将每一组进行合并，合并时比较大小后放到合并数组中。
+     */
+    private static int[] mergeSort(int[] arr, int start, int end) {
+        //当开始 == 结束角标，那么说明只剩下一个数据了，不需要再拆分了
+        if (start == end) {
+            return new int[]{arr[start]};
+        }
+        //从中间进行拆分
+        int mid = start + (end - start) / 2;
+        System.out.println(mid);
+        int[] leftArr = mergeSort(arr, start, mid);//左边数组
+        int[] rightArr = mergeSort(arr, mid + 1, end);//右边数组
+
+        int[] newArr = new int[leftArr.length + rightArr.length];//新数组
+        int nIndex = 0;
+        int lIndex = 0;
+        int rIndex = 0;
+        //当两端数组都有数据时，合并时，比较两端数据大小，小的先放到新数组中。
+        while (lIndex < leftArr.length && rIndex < rightArr.length) {
+            //两个数组中，小的数先放到newArr中。
+            newArr[nIndex++] = leftArr[lIndex] < rightArr[rIndex] ? leftArr[lIndex++] : rightArr[rIndex++];
+        }
+        //左边数组没有合并完，继续合并。如果数组元素是单数的时候，就可能会走到这个条件中。
+        while (lIndex < leftArr.length) {
+            newArr[nIndex++] = leftArr[lIndex++];
+        }
+        //右边数组没有合并完，继续合并。如果数组元素是单数的时候，就可能会走到这个条件中。
+        while (rIndex < rightArr.length) {
+            newArr[nIndex++] = rightArr[rIndex++];
+        }
+        return newArr;
+    }
+
+    /**
+     * 八、计数排序：稳定性排序，非原地排序，时间复杂度O(n + k)，空间复杂度O(n + k) k为整数的范围
+     * 只适合整数类型排序，非比较型排序
+     * <p></p>
+     * 原数组：{4, 1, 3, 0, -1}
+     * 1、计算数组最大值到最小值之间有多少个整数，并申请一个计数数组count[]
+     * 2、将数据的大小当做count数组的角标插入，如果同一个角标多一个就+1。转换完就等于将原数组的数据当成了count数组的角标存储了 [1, 1, 1, 0, 1, 1]
+     * 3、将count数组的值，依次加起来，就是原数组数据的排序了。只是这个排序的角标时从1开始的。[1, 2, 3, 3, 4, 5]
+     * 4、遍历原数组，通过count[]查找数据的角标位置。
+     *
+     * @return
+     */
+    private static int[] countSort(int[] arr) {
+        int[] result = new int[arr.length];
+        int max = arr[0], min = arr[0];
+        for (int value : arr) {
+            if (value > max) {
+                max = value;
+            }
+            if (value < min) {
+                min = value;
+            }
+        }
+        int k = max - min + 1;
+        int[] count = new int[k];
+        for (int value : arr) {
+            //将arr数据当成角标
+            int countIndex = value - min;
+            count[countIndex] += 1;
+        }
+        System.out.println(Arrays.toString(count));
+
+        //将count数组的值，转换成排序位置
+        for (int i = 1; i < count.length; i++) {
+            count[i] += count[i - 1];
+        }
+        System.out.println(Arrays.toString(count));
+
+        for (int i = arr.length - 1; i >= 0; i--) {//倒叙是为了保证稳定性
+            //源数据就是count的角标，而count的值对应的就是排序后的顺序，只是从1开始的。所以-1
+
+            //计算count数组的角标，这个角标就是源数据的值-min
+            int countIndex = arr[i] - min;
+            //通过count角标获取count数组的值，而这个值就是新数组的角标。
+            int rIndex = count[countIndex] - 1;
+            //这个arr[i]其实就是 countIndex + min
+            result[rIndex] = arr[i];
+        }
+
+        return result;
+    }
+
+    private static void swap(int[] arr, int source, int target) {
+        int tmp = arr[source];
+        arr[source] = arr[target];
+        arr[target] = tmp;
+    }
+
+
+    /**
+     * 九、桶排序
+     * @param data
+     */
     public static void basket(int[] data)//data为待排序数组
     {
         int n = data.length;
@@ -524,475 +484,6 @@ public class BaseSortTest {
 //        System.out.println(str.substring(0, 1));
 //    }
 
-    /**
-     * 1、冒泡：稳定排序、原地排序、时间复杂度O(n^2) 、空间复杂度O(1)
-     * <p></>
-     * 将最大或者最小的数放到数组最后
-     */
-    private static int[] bubbleSort3(int[] arr) {
-        int len = arr.length;
-        for (int i = 0; i < len - 1; i++) {
-            boolean flag = true;
-            for (int j = 0; j < len - i - 1; j++) {
-                if (arr[j] > arr[j + 1]) {
-                    int tmp = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = tmp;
-                    flag = false;
-                }
-            }
-            if (flag) {
-                break;
-            }
-        }
-        return arr;
-    }
-
-    /**
-     * 2、选择：非稳定排序、原地排序、时间复杂度O(n^2) 、空间复杂度O(1)
-     * <p></>
-     */
-    private static int[] selectSort3(int[] arr) {
-        int len = arr.length;
-        for (int i = 0; i < len - 1; i++) {
-            int minIndex = i;
-            for (int j = i + 1; j < len; j++) {
-                if (arr[j] < arr[minIndex]) {
-                    minIndex = j;
-                }
-            }
-            swap(arr, minIndex, i);
-        }
-        return arr;
-    }
-
-    /**
-     * 3、快排：非稳定排序、原地排序、时间复杂度O(nlogN) 、空间复杂度O(1)
-     * <p></>
-     */
-    private static void quickSort3(int[] arr, int low, int high) {
-        if (low >= high) {
-            return;
-        }
-        int start = low;
-        int end = high;
-
-        int sw = arr[low];
-        while (start < end) {
-            while (start < end && arr[end] > sw) {
-                end--;
-            }
-            if (start < end) {
-                arr[start++] = arr[end];
-            }
-            while (start < end && arr[start] < sw) {
-                start++;
-            }
-            if (start < end) {
-                arr[end--] = arr[start];
-            }
-
-        }
-        arr[start] = sw;
-
-        quickSort3(arr, low, start - 1);
-        quickSort3(arr, start + 1, end);
-
-    }
-
-    /**
-     * 4、插入：稳定排序、原地排序、时间复杂度O(n^2) 、空间复杂度O(1)
-     * <p></>
-     */
-    private static int[] insertSort3(int[] arr) {
-        int len = arr.length;
-        for (int i = 1; i < len; i++) {
-            int sw = arr[i];
-            int j = i - 1;
-            if (arr[j] > sw) {
-                while (j >= 0 && arr[j] > sw) {
-                    arr[j + 1] = arr[j];
-                    j--;
-                }
-                arr[j + 1] = sw;
-            }
-        }
-        return arr;
-    }
-
-    /**
-     * 5、希尔：稳定排序、原地排序、时间复杂度O(n ^ 1.3 ) 、空间复杂度O(1)
-     * <p></>
-     */
-    private static int[] shellSort3(int[] arr) {
-        int len = arr.length;
-        for (int gap = len / 2; gap > 0; gap /= 2) {
-            for (int i = gap; i < len; i++) {
-                int sw = arr[i];
-                int j = i - gap;
-                if (arr[j] > sw) {
-                    while (j >= 0 && arr[j] > sw) {
-                        arr[j + gap] = arr[j];
-                        j -= gap;
-                    }
-                    arr[j + gap] = sw;
-                }
-            }
-        }
-        return arr;
-    }
-
-    /**
-     * 6、归并：非稳定排序、非原地排序、时间复杂度O(nlogN ) 、空间复杂度O(n)
-     * <p></>
-     */
-    private static int[] mergeSort3(int[] arr, int low, int high) {
-        if (low == high) {
-            return new int[]{arr[low]};
-        }
-        int mid = low + (high - low) / 2;
-
-        int[] leftArr = mergeSort3(arr, low, mid);
-        int[] rightArr = mergeSort3(arr, mid + 1, high);
-
-        int[] newArr = new int[leftArr.length + rightArr.length];
-        int newIndex = 0;
-        int leftIndex = 0;
-        int rightIndex = 0;
-
-        while (leftIndex < leftArr.length && rightIndex < rightArr.length) {
-            newArr[newIndex++] = leftArr[leftIndex] < rightArr[rightIndex] ? leftArr[leftIndex++] : rightArr[rightIndex++];
-        }
-        while (leftIndex < leftArr.length) {
-            newArr[newIndex++] = leftArr[leftIndex++];
-        }
-        while (rightIndex < rightArr.length) {
-            newArr[newIndex++] = rightArr[rightIndex++];
-        }
-
-        return newArr;
-
-    }
-
-    /**
-     * 7、堆排序：非稳定排序、非原地排序、时间复杂度O(nlogN ) 、空间复杂度O(n)
-     * <p></>
-     */
-    private static int[] heapSort3(int[] arr) {
-        //建大顶堆，
-        for (int i = arr.length / 2 - 1; i < arr.length; i--) {
-            adjustHeap3(arr, i, arr.length);
-        }
-
-        //取出顶堆的第一个元素，放到最后，然后len - 1
-        for (int len = arr.length; len > 1; len--) {
-            swap(arr, 0, len - 1);
-            //重新建堆
-            adjustHeap3(arr,0, len - 1);
-        }
-
-        return arr;
-    }
-
-    private static int[] adjustHeap3(int[] arr, int parentIndex, int len) {
-        int tmp = arr[parentIndex];
-        for (int k = 2 * parentIndex + 1; k < len; k = 2 * k + 1) {
-            //比较左右子节点
-            if (k + 1 < len && arr[k + 1] > arr[k]) {
-                k++;
-            }
-            if (arr[k] > tmp) {
-                swap(arr, k, parentIndex);
-                parentIndex = k;
-            } else {
-                break;
-            }
-        }
-        return arr;
-    }
-
-    /**
-     * 8、计数排序：稳定性排序、非原地排序、时间复杂度O(n + k)、O(k) k是取值范围
-     * 不是比较排序
-     * 1、取出最大值，生成相应的count数组
-     * 2、遍历数组，将值当成count数组角标存入。
-     * 3、遍历count数组，将其中有数据的角标拿出来放回arr数组中。
-     *
-     * @param arr
-     * @return
-     */
-    private static int[] countSort3(int[] arr) {
-        if (arr == null || arr.length < 1) {
-            return null;
-        }
-        int len = arr.length;
-        int max = arr[0];
-        int min = arr[0];
-        for (int i = 1; i < len; i++) {
-            if (arr[i] > max) {
-                max = arr[i];
-            }
-            if (arr[i] < min) {
-                min = arr[i];
-            }
-        }
-        int[] count = new int[max - min + 1];
-        for (int i = 0; i < len; i++) {
-            count[arr[i] - min] += 1;
-        }
-        int index = 0;
-        for (int i = 0; i < count.length; i++) {
-            while (count[i] > 0) {
-                arr[index++] = i + min;
-                count[i] -= 1;
-            }
-        }
-        return arr;
-    }
-
-
-//    /**
-//     * 1、冒泡：稳定排序、原地排序、时间复杂度O(n^2) 、空间复杂度O(1)
-//     * <p></>
-//     * 将最大或者最小的数放到数组最后
-//     */
-//    private static int[] bubbleSort3(int[] arr) {
-//        int len = arr.length;
-//        for (int i = 0; i < len - 1; i++) {
-//            boolean flag = true;
-//            for (int j = 0; j < len - i - 1; j++) {
-//                if (arr[j] > arr[j + 1]) {
-//                    int tmp = arr[j];
-//                    arr[j] = arr[j + 1];
-//                    arr[j + 1] = tmp;
-//                    flag = false;
-//                }
-//            }
-//            if (flag) {
-//                break;
-//            }
-//        }
-//        return arr;
-//    }
-//
-//    /**
-//     * 2、选择：非稳定排序、原地排序、时间复杂度O(n^2) 、空间复杂度O(1)
-//     * <p></>
-//     */
-//    private static int[] selectSort3(int[] arr) {
-//        int len = arr.length;
-//        for (int i = 0; i < len - 1; i++) {
-//            int minIndex = i;
-//            for (int j = i + 1; j < len; j++) {
-//                if (arr[minIndex] > arr[j]) {
-//                    minIndex = j;
-//                }
-//            }
-//            if (minIndex != i) {
-//                int tmp = arr[minIndex];
-//                arr[minIndex] = arr[i];
-//                arr[i] = tmp;
-//            }
-//        }
-//        return arr;
-//    }
-//
-//    /**
-//     * 3、快排：非稳定排序、原地排序、时间复杂度O(nlogN) 、空间复杂度O(1)
-//     * <p></>
-//     */
-//    private static void quickSort3(int[] arr, int low, int high) {
-//        if (low >= high) {
-//            return;
-//        }
-//        int mid = low + (high - low) / 2;
-//        int start = low;
-//        int end = high;
-//
-//        int sw = arr[mid];
-//        while (start < end) {
-//            while (start < end && sw < arr[end]) {
-//                end--;
-//            }
-//            if (start < end) {
-//                arr[start++] = arr[end];
-//            }
-//            while (start < end && sw > arr[start]) {
-//                start++;
-//            }
-//            if (start < end) {
-//                arr[end--] = arr[start];
-//            }
-//        }
-//
-//        arr[start] = sw;
-//
-//        quickSort3(arr, low, mid - 1);
-//        quickSort3(arr, mid + 1, high);
-//    }
-//
-//    /**
-//     * 4、插入：稳定排序、原地排序、时间复杂度O(n^2) 、空间复杂度O(1)
-//     * <p></>
-//     */
-//    private static int[] insertSort3(int[] arr) {
-//        int len = arr.length;
-//        for (int i = 1; i < len; i++) {
-//            int sw = arr[i];
-//            if (sw < arr[i - 1]) {
-//                int j = i - 1;
-//                while (j >= 0 && sw < arr[j]) {
-//                    arr[j + 1] = arr[j];
-//                    j--;
-//                }
-//                arr[j + 1] = sw;
-//            }
-//        }
-//        return arr;
-//    }
-//
-//    /**
-//     * 5、希尔：稳定排序、原地排序、时间复杂度O(n ^ 1.3 ) 、空间复杂度O(1)
-//     * <p></>
-//     */
-//    private static int[] shellSort3(int[] arr) {
-//        int len = arr.length;
-//        for (int gap = arr.length / 2; gap >= 1; gap /= 2) {
-//            for (int i = gap; i < len; i++) {
-//                int sw = arr[i];
-//                if (sw < arr[i - gap]) {
-//                    int j = i - gap;
-//                    while (j >= 0 && sw < arr[j]) {
-//                        arr[j + gap] = arr[j];
-//                        j -= gap;
-//                    }
-//                    arr[j + gap] = sw;
-//                }
-//            }
-//        }
-//        return arr;
-//    }
-//
-//    /**
-//     * 6、归并：非稳定排序、非原地排序、时间复杂度O(nlogN ) 、空间复杂度O(n)
-//     * <p></>
-//     */
-//    private static int[] mergeSort3(int[] arr, int low, int high) {
-//        if (low == high) {
-//            return new int[]{arr[low]};
-//        }
-//        int mid = low + (high - low) / 2;
-//
-//        int[] leftArr = mergeSort3(arr, low, mid);
-//        int[] rightArr = mergeSort3(arr, mid + 1, high);
-//
-//        int[] newArr = new int[leftArr.length + rightArr.length];
-//
-//        int leftIndex = 0;
-//        int rightIndex = 0;
-//        int newIndex = 0;
-//
-//        while (leftIndex < leftArr.length && rightIndex < rightArr.length) {
-//            newArr[newIndex++] = leftArr[leftIndex] < rightArr[rightIndex] ? leftArr[leftIndex++] : rightArr[rightIndex++];
-//        }
-//        while (leftIndex < leftArr.length) {
-//            newArr[newIndex++] = leftArr[leftIndex++];
-//        }
-//        while (rightIndex < rightArr.length) {
-//            newArr[newIndex++] = rightArr[rightIndex++];
-//        }
-//
-//        return newArr;
-//    }
-//
-//    /**
-//     * 7、堆排序：非稳定排序、非原地排序、时间复杂度O(nlogN ) 、空间复杂度O(n)
-//     * <p></>
-//     */
-//    private static int[] heapSort3(int[] arr) {
-//        //1、建大顶堆
-//        //2、将堆顶数据放到数组最后一位，重新调整堆，直到堆只剩下一个数据
-//
-////        arr.length / 2 - 1 等于 最后一个非叶子节点
-//        for (int i = arr.length / 2 - 1; i >= 0; i--) {
-//            adjustHeap3(arr, i, arr.length);
-//        }
-//
-//        for (int i = arr.length - 1; i >= 0; i--) {
-//            swap(arr, 0, i);
-//            adjustHeap3(arr, 0, i);
-//        }
-//
-//
-//        //调整堆：
-//        //1、循环获取左子节点
-//        //2、获取左子节点、右子节点中较大的角标
-//        //3、将这个角标和父节点比较，是否大于父节点，如果大于就和父节点换换
-//        //4、换过之后该子节点设置成循环体的父节点，重新给这个子节点下边的子节点排序。
-//        //5、如果子节点和父节点不需要交换，就退出循环
-//
-//
-//        return arr;
-//    }
-//
-//    private static int[] adjustHeap3(int[] arr, int i, int len) {
-//        int parent = arr[i];
-//        //循环做子节点
-//        for (int k = 2 * i + 1; k < len; k = 2 * k + 1) {
-//            if (k + 1 < len && arr[k] < arr[k + 1]) {
-//                k++;
-//            }
-//            if (parent < arr[k]) {
-//                swap(arr, i, k);
-//
-//                i = k;
-//            } else {
-//                break;
-//            }
-//
-//        }
-//        return arr;
-//    }
-//
-//    /**
-//     * 8、计数排序：稳定性排序、非原地排序、时间复杂度O(n + k)、O(k) k是取值范围
-//     * 不是比较排序
-//     * 1、取出最大值，生成相应的count数组
-//     * 2、遍历数组，将值当成count数组角标存入。
-//     * 3、遍历count数组，将其中有数据的角标拿出来放回arr数组中。
-//     *
-//     * @param arr
-//     * @return
-//     */
-//    private static int[] countSort3(int[] arr) {
-//        if (arr == null || arr.length < 1) {
-//            return null;
-//        }
-//        int len = arr.length;
-//        int max = arr[0];
-//        int min = arr[0];
-//        for (int i = 1; i < len; i++) {
-//            if (arr[i] > max) {
-//                max = arr[i];
-//            }
-//            if (arr[i] < min) {
-//                min = arr[i];
-//            }
-//        }
-//        int[] count = new int[max - min + 1];
-//        for (int i = 0; i < len; i++) {
-//            count[arr[i] - min] += 1;
-//        }
-//        int index = 0;
-//        for (int i = 0; i < count.length; i++) {
-//            while (count[i] > 0) {
-//                arr[index++] = i + min;
-//                count[i] -= 1;
-//            }
-//        }
-//        return arr;
-//    }
-
 
     /**
      * 面试题61. 扑克牌中的顺子
@@ -1009,7 +500,7 @@ public class BaseSortTest {
      * @return
      */
     public boolean isStraight(int[] nums) {
-        quickSort1(nums, 0, nums.length - 1);
+        quickSort(nums, 0, nums.length - 1);
         int min = Integer.MAX_VALUE;
         for (int i = 0; i < nums.length; i++) {
             if (nums[i] != 0) {
@@ -1024,47 +515,6 @@ public class BaseSortTest {
             return true;
         }
         return false;
-
-    }
-
-    /**
-     * 递归：
-     * 1、结束条件 low >= high
-     * 1、取start角标的数n，放到他应该在的中间位置上，大于n的放右边，小于n的放左边
-     * 2、分成两半：排这个low -> n的新角标， n的新角标 -> high
-     */
-    public void quickSort1(int[] arr, int low, int high){
-        if (low >= high){
-            return;
-        }
-        int start = low;
-        int end = high;
-
-        int sw = arr[low];
-        while (start < end) {
-
-            //从end王前推，找到第一个小于sw的数
-            while (start < end && sw < arr[end]) {
-                end--;
-            }
-
-            if (start < end) {
-                arr[start++] = arr[end];
-            }
-
-            //从start往后推，找到第一个大于sw的数
-            while (start < end && sw > arr[start]) {
-                start ++;
-            }
-            if (start < end) {
-                arr[end --] = arr[start];
-            }
-        }
-
-        arr[start] = sw;
-
-        quickSort1(arr,start + 1, high);
-        quickSort1(arr,low, start - 1);
     }
 
 
@@ -1077,7 +527,7 @@ public class BaseSortTest {
      * 输入: [10,2]
      * 输出: "102"
      *
-     * 示例 2:
+     * 示例2:
      * 输入: [3,30,34,5,9]
      * 输出: "3033459"
      *
@@ -1133,11 +583,6 @@ public class BaseSortTest {
     private static boolean isLeftBig(int left,int right) {
         return (left + "" + right).compareTo(right + "" + left) > 0;
 //        return Long.parseLong(left + "" + right) > Long.parseLong(right + "" + left);
-    }
-
-    public static void main(String[] args) {
-        int arr[] = new int[]{10,2};
-        System.out.println(minNumber(arr));
     }
 
     /**
