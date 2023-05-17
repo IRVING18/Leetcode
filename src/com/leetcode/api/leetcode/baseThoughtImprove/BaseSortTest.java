@@ -360,6 +360,10 @@ public class BaseSortTest {
     /**
      * 堆排序
      *
+     * 口诀：
+     * 最后一个非叶子结点：len / 2 - 1
+     * 左子树：k * 2 + 1
+     *
      * @param array 待排序数组
      * @return 已排序数组
      */
@@ -402,7 +406,9 @@ public class BaseSortTest {
             //如果发现结点(左右子结点)大于根结点，则进行值的交换
             if (array[k] > temp) {
                 swap(array, i, k);
-                // 如果子节点更换了，那么，以子节点为根的子树会受到影响,所以，循环对子节点所在的树继续进行判断
+                // 如果子节点更换了，那么，以子节点为根的子树会受到影响,
+                // 所以继续比较时是k的左右子节点，再swap时需要换到k处。
+                // 由于第一次建堆时，是从最后一个非叶子结点往前遍历的。比较是从树的最下层开始排序好的，所以才能这样写。
                 i = k;
             } else {  //不用交换，直接终止循环
                 break;
@@ -673,71 +679,36 @@ public class BaseSortTest {
      * <p></>
      */
     private static int[] heapSort3(int[] arr) {
-        //1、建立大顶堆，从最后一个非叶子结点，往前循环，直到最顶端index = 0
-        int len = arr.length;
-        for (int i = len / 2 - 1; i >= 0; i--) {
-            adjustHeap3(arr, i, len);
-        }
-        //2、将顶端和最后一位交换，然后用除去最后一位的数组作为新数组，重新调整堆
-        for (int i = len - 1; i > 0; i--) {
-            swap(arr, 0, i);
-            adjustHeap3(arr, 0, i);
+        //建大顶堆，
+        for (int i = arr.length / 2 - 1; i < arr.length; i--) {
+            adjustHeap3(arr, i, arr.length);
         }
 
-
-        //调整堆
-        //1、获取左子树k = 2 * i + 1，
-        //2、如果右子树k+1不超过len，那么就比较两个大小
-        //3、用大的子节点和父节点交换
-        //4、如果发生了交换，那么就将这个数作为新的父节点i，继续调整。
-        //5、如果不需要交换，就结束调整
-
-
-//        //1、建大顶堆
-//        //2、将堆顶数据放到数组最后一位，重新调整堆，直到堆只剩下一个数据
-//
-////        arr.length / 2 - 1 等于 最后一个非叶子节点
-//        for (int i = arr.length / 2 - 1; i >= 0; i--) {
-//            adjustHeap3(arr, i, arr.length);
-//        }
-//
-//        for (int i = arr.length - 1; i >= 0; i--) {
-//            swap(arr, 0, i);
-//            adjustHeap3(arr, 0, i);
-//        }
-//
-//
-//        //调整堆：
-//        //1、循环获取左子节点
-//        //2、获取左子节点、右子节点中较大的角标
-//        //3、将这个角标和父节点比较，是否大于父节点，如果大于就和父节点换换
-//        //4、换过之后该子节点设置成循环体的父节点，重新给这个子节点下边的子节点排序。
-//        //5、如果子节点和父节点不需要交换，就退出循环
-
+        //取出顶堆的第一个元素，放到最后，然后len - 1
+        for (int len = arr.length; len > 1; len--) {
+            swap(arr, 0, len - 1);
+            //重新建堆
+            adjustHeap3(arr,0, len - 1);
+        }
 
         return arr;
     }
 
     private static int[] adjustHeap3(int[] arr, int parentIndex, int len) {
-        //父节点
-        int parent = arr[parentIndex];
-        //k 为左子节点
+        int tmp = arr[parentIndex];
         for (int k = 2 * parentIndex + 1; k < len; k = 2 * k + 1) {
-            //右节点大于左节点
+            //比较左右子节点
             if (k + 1 < len && arr[k + 1] > arr[k]) {
                 k++;
             }
-            if (arr[k] > parent) {
-                //将子节点中大的数和父节点交换位置
+            if (arr[k] > tmp) {
                 swap(arr, k, parentIndex);
-                //换完位置之后，被换的子节点可能就需要调整了，所以将k当成父节点继续调整
                 parentIndex = k;
             } else {
                 break;
             }
         }
         return arr;
-
     }
 
     /**
