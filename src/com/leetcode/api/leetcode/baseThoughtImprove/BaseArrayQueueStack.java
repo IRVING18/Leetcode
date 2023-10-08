@@ -17,7 +17,7 @@ import java.util.*;
  *      peek() 获取栈顶
  *
  * 2、思路
- *  双指针
+ *  双指针：同向指针、逆向指针、相向指针、快慢指针
  *  利用辅助栈操作 validateStackSequences
  *  双栈实现：min O(1) 的栈
  *  双队列（一个双向队列）实现：max O(1)的队列
@@ -33,6 +33,8 @@ public class BaseArrayQueueStack {
 
     /**
      * 88. 合并两个有序数组
+     *
+     * 逆向指针
      *
      * 给你两个按 非递减顺序 排列的整数数组 nums1 和 nums2，另有两个整数 m 和 n ，分别表示 nums1 和 nums2 中的元素数目。
      *
@@ -69,6 +71,9 @@ public class BaseArrayQueueStack {
 
     /**
      * 27. 移除元素
+     *
+     * 相向指针
+     *
      * 给你一个数组 nums 和一个值 val，你需要 原地 移除所有数值等于 val 的元素，并返回移除后数组的新长度。
      *
      * 不要使用额外的数组空间，你必须仅使用 O(1) 额外空间并 原地 修改输入数组。
@@ -98,6 +103,100 @@ public class BaseArrayQueueStack {
         }
         return j + 1;
     }
+
+    /**
+     * 26. 删除有序数组中的重复项
+     *
+     *  快慢指针
+     *
+     *  给你一个 非严格递增排列 的数组 nums ，请你 原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。元素的 相对顺序 应该保持 一致 。然后返回 nums 中唯一元素的个数。
+     *
+     * 考虑 nums 的唯一元素的数量为 k ，你需要做以下事情确保你的题解可以被通过：
+     *
+     * 更改数组 nums ，使 nums 的前 k 个元素包含唯一元素，并按照它们最初在 nums 中出现的顺序排列。nums 的其余元素与 nums 的大小不重要。
+     *
+     *  https://leetcode.cn/problems/remove-duplicates-from-sorted-array/description/?envType=study-plan-v2&envId=top-interview-150
+     */
+    public int removeDuplicates(int[] nums) {
+        if(nums.length == 0) {
+            return 0;
+        }
+        int slow = 1;
+        int fast = 1;
+
+        while(fast < nums.length) {
+            if(nums[fast] != nums[fast - 1]) {
+                nums[slow++] = nums[fast];
+            }
+            fast ++;
+        }
+        return slow;
+    }
+
+    /**
+     *
+     * 删除排序数组中的重复项 II
+     *
+     * 给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使得出现次数超过两次的元素只出现两次 ，返回删除后数组的新长度。
+     *
+     * 不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
+     *
+     *
+     *
+     * 说明：
+     *
+     * 为什么返回数值是整数，但输出的答案是数组呢？
+     *
+     * 请注意，输入数组是以「引用」方式传递的，这意味着在函数里修改输入数组对于调用者是可见的。
+     *
+     * 你可以想象内部操作如下:
+     *
+     * // nums 是以“引用”方式传递的。也就是说，不对实参做任何拷贝
+     * int len = removeDuplicates(nums);
+     *
+     * // 在函数里修改输入数组对于调用者是可见的。
+     * // 根据你的函数返回的长度, 它会打印出数组中 该长度范围内 的所有元素。
+     * for (int i = 0; i < len; i++) {
+     *     print(nums[i]);
+     * }
+     *
+     *
+     * 示例 1：
+     *
+     * 输入：nums = [1,1,1,2,2,3]
+     * 输出：5, nums = [1,1,2,2,3]
+     * 解释：函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3。 不需要考虑数组中超出新长度后面的元素。
+     * 示例 2：
+     *
+     * 输入：nums = [0,0,1,1,1,1,2,3,3]
+     * 输出：7, nums = [0,0,1,1,2,3,3]
+     * 解释：函数应返回新长度 length = 7, 并且原数组的前五个元素被修改为 0, 0, 1, 1, 2, 3, 3。不需要考虑数组中超出新长度后面的元素。
+     *
+     *
+     * 提示：
+     *
+     * 1 <= nums.length <= 3 * 104
+     * -104 <= nums[i] <= 104
+     * nums 已按升序排列
+     */
+    public int removeDuplicates2(int[] nums) {
+        if(nums.length <= 2) {
+            return nums.length;
+        }
+
+        int slow = 2;
+        int fast = 2;
+        while(fast < nums.length) {
+
+            if(nums[slow - 2] != nums[fast]) {
+                nums[slow ++] = nums[fast];
+            }
+            fast ++;
+        }
+        return slow;
+    }
+
+
 
     /**
      * 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
