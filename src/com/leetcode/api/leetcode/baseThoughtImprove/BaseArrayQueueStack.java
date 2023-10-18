@@ -63,6 +63,20 @@ public class BaseArrayQueueStack {
         }
     }
 
+    public void rotate(int[] nums, int k1) {
+        int k = k1 % nums.length;
+        System.out.println(k);
+        int[] arr = new int[nums.length];
+        int arrIn = 0;
+        for(int i = nums.length - k; i < nums.length ; i++) {
+            arr[arrIn ++] = nums[i];
+        }
+        for(int i = 0; i < nums.length - k; i ++) {
+            arr[arrIn ++] = nums[i];
+        }
+        nums = arr;
+    }
+
     public void swap(int[] num, int from, int to) {
         int swap = num[from];
         num[from] = num[to];
