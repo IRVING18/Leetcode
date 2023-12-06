@@ -7,7 +7,45 @@ import java.util.Map;
  * 字符串操作
  */
 public class BaseString {
+    /**
+     * 125. 验证回文串
+     * 如果在将所有大写字符转换为小写字符、并移除所有非字母数字字符之后，短语正着读和反着读都一样。则可以认为该短语是一个 回文串 。
+     * 字母和数字都属于字母数字字符。
+     * 给你一个字符串 s，如果它是 回文串 ，返回 true ；否则，返回 false 。
+     *
+     *
+     * 记住API：
+     * 1、Character.toLowerCase()
+     * 2、Character.isLetterOrDigit()
+     * 3、String s; s.toLowerCase()
+     * 4、s.toCharArray();
+     */
+    public boolean isPalindrome(String s) {
+        char[] array = s.toLowerCase().toCharArray();
+        int sI = 0;
+        int eI = array.length - 1;
+        while(sI <= eI) {
+            char sC = array[sI];
+            char eC = array[eI];
 
+            if(!Character.isLetterOrDigit(sC)) {
+                sI ++;
+                continue;
+            }
+
+            if(!Character.isLetterOrDigit(eC)) {
+                eI --;
+                continue;
+            }
+
+            if(Character.toLowerCase(sC) != Character.toLowerCase(eC)) {
+                return false;
+            }
+            sI ++;
+            eI --;
+        }
+        return true;
+    }
     /**
      * 13. 罗马数字转整数
      * 罗马数字包含以下七种字符: I， V， X， L，C，D 和 M。
