@@ -1201,4 +1201,84 @@ public class BaseArrayQueueStack {
         }
         return res;
     }
+
+    /**
+     *
+     * 134. 加油站
+     * 在一条环路上有 n 个加油站，其中第 i 个加油站有汽油 gas[i] 升。
+     * 你有一辆油箱容量无限的的汽车，从第 i 个加油站开往第 i+1 个加油站需要消耗汽油 cost[i] 升。你从其中的一个加油站出发，开始时油箱为空。
+     * 给定两个整数数组 gas 和 cost ，如果你可以按顺序绕环路行驶一周，则返回出发时加油站的编号，否则返回 -1 。如果存在解，则 保证 它是 唯一 的。
+     *
+     * https://leetcode.cn/problems/gas-station/description/?envType=study-plan-v2&envId=top-interview-150
+     *
+     *
+     * 总结：如果x到不了y+1（但能到y），那么从x到y的任一点出发都不可能到达y+1。
+     * 因为从其中任一点出发的话，相当于从0开始加油，而如果从x出发到该点则不一定是从0开始加油，可能还有剩余的油。
+     * 既然不从0开始都到不了y+1，那么从0开始就更不可能到达y+1了...
+     * @param gas
+     * @param cost
+     * @return
+     */
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int len = gas.length;
+        out:for (int i = 0; i < len; i++) {
+            int all = 0;
+            int count = 0;
+            int index = i;
+            while (count < len) {
+                count ++;
+
+                all = all + gas[index] - cost[index];
+                if (all < 0) {
+                    break;
+                }
+                if (index < len - 1) {
+                    index++;
+                } else {
+                    index = 0;
+                }
+            }
+            if (all >= 0) {
+                return i;
+            } else {
+
+                //这步比较关键，能优化时间复杂度，加count -1 的目的就是，count-1前的都到不了，所以直接从count-1后再去找
+                i = i + count -1;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 135. 分发糖果
+     * n 个孩子站成一排。给你一个整数数组 ratings 表示每个孩子的评分。
+     *
+     * 你需要按照以下要求，给这些孩子分发糖果：
+     *
+     * 每个孩子至少分配到 1 个糖果。
+     * 相邻两个孩子评分更高的孩子会获得更多的糖果。
+     * 请你给每个孩子分发糖果，计算并返回需要准备的 最少糖果数目 。
+     */
+    public int candy(int[] ratings) {
+        int n = ratings.length;
+        int[] left = new int[n];
+        for (int i = 0; i < n; i++) {
+            if (i > 0 && ratings[i] > ratings[i - 1]) {
+                left[i] = left[i - 1] + 1;
+            } else {
+                left[i] = 1;
+            }
+        }
+        int right = 0, ret = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            if (i < n - 1 && ratings[i] > ratings[i + 1]) {
+                right++;
+            } else {
+                right = 1;
+            }
+            ret += Math.max(left[i], right);
+        }
+        return ret;
+    }
+
 }
