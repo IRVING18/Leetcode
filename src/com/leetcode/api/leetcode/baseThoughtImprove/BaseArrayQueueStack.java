@@ -32,6 +32,59 @@ import java.util.*;
 public class BaseArrayQueueStack {
 
     /**
+     * 167. 两数之和 II - 输入有序数组
+     *
+     * 给你一个下标从 1 开始的整数数组 numbers ，该数组已按 非递减顺序排列  ，请你从数组中找出满足相加之和等于目标数 target 的两个数。如果设这两个数分别是 numbers[index1] 和 numbers[index2] ，则 1 <= index1 < index2 <= numbers.length 。
+     * 以长度为 2 的整数数组 [index1, index2] 的形式返回这两个整数的下标 index1 和 index2。
+     * 你可以假设每个输入 只对应唯一的答案 ，而且你 不可以 重复使用相同的元素。
+     * 你所设计的解决方案必须只使用常量级的额外空间。
+     *
+     * https://leetcode.cn/problems/two-sum-ii-input-array-is-sorted/description/?envType=study-plan-v2&envId=top-interview-150
+     * @param numbers
+     * @param target
+     * @return
+     */
+    public int[] twoSum1(int[] numbers, int target) {
+        //方法一： 双指针
+        // int len = numbers.length;
+        // int[] res = new int[2];
+        // int left = 0;
+        // int right = len - 1;
+        // while(left < right) {
+        //     int l = numbers[left];
+        //     int r = numbers[right];
+        //     if(l + r > target) {
+        //         right --;
+        //     } else if(l + r < target) {
+        //         left ++;
+        //     } else {
+        //         return new int[]{left + 1, right + 1};
+        //     }
+        // }
+        // return res;
+
+        //方法二：二分法
+        int len = numbers.length;
+        for(int i = 0; i < len; i ++) {
+            int l = numbers[i];
+            int r = target - l;
+            int lowI = i + 1;
+            int highI = len - 1;
+            while(lowI <= highI) {
+                int midI = (lowI + highI) / 2;
+                if(numbers[midI] < r) {
+                    lowI = midI + 1;
+                } else if(numbers[midI] > r) {
+                    highI = midI - 1;
+                } else {
+                    return new int[]{i + 1, midI + 1};
+                }
+            }
+        }
+        return new int[2];
+    }
+
+    /**
      * 88. 合并两个有序数组
      *
      * 逆向指针
