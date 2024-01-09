@@ -1334,4 +1334,78 @@ public class BaseArrayQueueStack {
         return ret;
     }
 
+
+    /**
+     * 42. 接雨水
+     *
+     * https://leetcode.cn/problems/trapping-rain-water/description/?envType=study-plan-v2&envId=top-interview-150
+     * @param height
+     * @return
+     */
+    public int trap(int[] height) {
+
+        //动态规划
+        //https://leetcode.cn/problems/trapping-rain-water/solutions/692342/jie-yu-shui-by-leetcode-solution-tuvc/?envType=study-plan-v2&envId=top-interview-150
+        int len = height.length;
+        if(len == 0) {
+            return 0;
+        }
+        int[] leftMax = new int[len];
+        leftMax[0] = height[0];
+        for(int i = 1; i < len; i ++) {
+            leftMax[i] = Math.max(leftMax[i - 1], height[i]);
+        }
+        int[] rightMax = new int[len];
+        rightMax[len - 1] = height[len - 1];
+        for(int i = len - 2; i >= 0; i --) {
+            rightMax[i] = Math.max(rightMax[i + 1], height[i]);
+        }
+
+        int res = 0;
+        for(int i = 0; i < len; i ++) {
+            res += Math.min(leftMax[i], rightMax[i]) - height[i];
+        }
+        return res;
+
+        //这个方法能用，但是超时
+        //思路：一层一层算，每一层算那个空位置；
+        // int start = 0;
+        // int end = height.length - 1;
+        // int res = 0;
+        // int[] arr = getStartEnd(height, start,end);
+        // while ((start = arr[0]) < (end = arr[1]) && start >= 0 && end >= 0) {
+        //     res += trapd(height, start, end);
+        //     arr = getStartEnd(height, start, end);
+        // }
+        // return res;
+
+    }
+
+    private int[] getStartEnd(int[] height, int start, int end){
+        int leftI = start;
+        int rightI = end;
+        while ((height[leftI] < 1 || height[rightI] < 1) && leftI < rightI) {
+            if (height[leftI] < 1) {
+                leftI ++;
+            }
+            if (height[rightI] < 1) {
+                rightI --;
+            }
+        }
+        return new int[]{leftI, rightI};
+    }
+
+    public int trapd(int[] height, int start, int end) {
+        height[start] = height[start] - 1;
+        height[end] = height[end] - 1;
+        int res = 0;
+        for (int i = start + 1; i < end; i++) {
+            if (height[i] == 0) {
+                res ++;
+            } else {
+                height[i] = height[i] - 1;
+            }
+        }
+        return res;
+    }
 }
