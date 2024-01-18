@@ -63,6 +63,132 @@ public class BaseArrayMatrix {
         return res;
     }
 
+
+    /**
+     *
+     * 48. 旋转图像
+     * 已解答
+     * 中等
+     * 相关标签
+     * 相关企业
+     * 给定一个 n × n 的二维矩阵 matrix 表示一个图像。请你将图像顺时针旋转 90 度。
+     *
+     * 你必须在 原地 旋转图像，这意味着你需要直接修改输入的二维矩阵。请不要 使用另一个矩阵来旋转图像。
+     *
+     * https://leetcode.cn/problems/rotate-image/?envType=study-plan-v2&envId=top-interview-150
+     *
+     * 1   2  3  4
+     * 5   6  7  8
+     * 9  10 11 12
+     * 13 14 15 16
+     *
+     * 13  9   5  1
+     * 14  10  6  2
+     * 15  11  7  3
+     * 16  12  8  4
+     */
+    public void rotate(int[][] matrix) {
+        int n = matrix.length;
+        //行1、列2，就已经都换了一遍了，除了5
+        for (int row = 0; row < n / 2; row++) {
+            for (int col = 0; col < (n + 1) / 2; col++) {
+                //技巧：想着4X4的，换边就换row/col，换的意思是newRow根据col计算，newCol根据row计算；
+
+                //顶部第二个[0,1](2)，暂存
+                int tmp = matrix[row][col];
+                //顶部第二个[0,1](2) = 左侧第三个[2,0](9)
+                matrix[row][col] = matrix[n - col - 1][row];
+                //左侧第三个[2,0](9) = 底部第三个[2,2](15)
+                matrix[n - col - 1][row] = matrix[n - row - 1][n - col - 1];
+                //底部第三个[2,2](15) = 右侧第二个[1,2](8)
+                matrix[n - row - 1][n - col - 1] = matrix[col][n - row - 1];
+                matrix[col][n - row - 1] = tmp;
+            }
+        }
+    }
+
+    /**
+     * 73. 矩阵置零
+     * 给定一个 m x n 的矩阵，如果一个元素为 0 ，则将其所在行和列的所有元素都设为 0 。请使用 原地 算法。
+     * https://leetcode.cn/problems/set-matrix-zeroes/description/?envType=study-plan-v2&envId=top-interview-150
+     * @param matrix
+     */
+    public void setZeroes(int[][] matrix) {
+        // //方法一：空间复杂度O(m + n) 的情况去算
+        // //1、记录每一行/列中是否有0，设为true
+        // //2、遍历二维数组，判断改列、行是否有true；
+        // if(matrix.length < 1 || matrix[0].length < 1) {
+        //     return;
+        // }
+        // int rowLen = matrix.length;
+        // int colLen = matrix[0].length;
+        // boolean[] rowBol = new boolean[rowLen];
+        // boolean[] colBol = new boolean[colLen];
+
+        // for(int row = 0; row < rowLen; row ++) {
+        //     for(int col = 0; col < colLen; col ++) {
+        //         if(matrix[row][col] == 0) {
+        //             rowBol[row] = colBol[col] = true;
+        //         }
+        //     }
+        // }
+
+        // for(int row = 0; row < rowLen; row ++) {
+        //     for(int col = 0; col < colLen; col ++) {
+        //         if(rowBol[row] || colBol[col]) {
+        //              matrix[row][col] = 0;
+        //         }
+        //     }
+        // }
+
+        //方法二：空间复杂度O(1)
+        //用第一行、第一列当成 boolean数组去记录；设置为0，他并不影响最后的结果，因为本身他也要被设置成0；
+        if(matrix.length < 1 || matrix[0].length < 1) {
+            return;
+        }
+        int rowLen = matrix.length;
+        int colLen = matrix[0].length;
+        boolean rowFlag = false;
+        boolean colFlag = false;
+        //先判断下第一行、第一列中是否存在0；存在就在最后把整行、列设置0；
+        for(int row = 0; row < rowLen; row ++) {
+            if(matrix[row][0] == 0) {
+                colFlag = true;
+            }
+        }
+        for(int col = 0; col < colLen; col ++) {
+            if(matrix[0][col] == 0) {
+                rowFlag = true;
+            }
+        }
+        //从1开始，第一行作为标记行
+        for(int row = 1; row < rowLen; row ++) {
+            for(int col = 1; col < colLen; col ++) {
+                if(matrix[row][col] == 0) {
+                    matrix[row][0] = matrix[0][col] = 0;
+                }
+            }
+        }
+        //根据第一行、列的标记为，设置所有位置
+        for(int row = 1; row < rowLen; row ++) {
+            for(int col = 1; col < colLen; col ++) {
+                if(matrix[row][0] == 0 || matrix[0][col] == 0) {
+                    matrix[row][col] = 0;
+                }
+            }
+        }
+        if(rowFlag) {
+            for(int col = 0; col < colLen; col ++) {
+                matrix[0][col] = 0;
+            }
+        }
+        if(colFlag) {
+            for(int row = 0; row < rowLen; row ++) {
+                matrix[row][0] = 0;
+            }
+        }
+    }
+
     /**
      * 在 MATLAB 中，有一个非常有用的函数 reshape ，它可以将一个 m x n 矩阵重塑为另一个大小不同（r x c）的新矩阵，但保留其原始数据。
      *
