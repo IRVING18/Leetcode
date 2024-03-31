@@ -4,7 +4,9 @@ import java.util.HashMap;
 
 /**
  * 动态规划
- * 
+ *
+ * 最长公共子序列问题是典型的二维动态规划问题。
+ *
  * 1、思路：从前边的简单情况入手，简单分析 =》 推导动态规划方程
  * 2、关注当前和前一个、前两个的关系，简化出动态方程
  *
@@ -15,6 +17,39 @@ import java.util.HashMap;
  *      四、结果值
  */
 public class DynamicPlanning {
+
+    /**
+     * 最经典的题，一定要会
+     *
+     * 最长公共子序列问题是典型的二维动态规划问题。
+     *
+     * 动态转移方程：
+     * dp[i,j] =
+     *  1、num[i] == num[j] 时，= dp[i-1][j-1] + 1;
+     *  2、num[i] != num[j] 时，= Max(dp[i-1][j], dp[i][j-1]);
+     *
+     * https://leetcode.cn/problems/qJnOS7/solutions/1025575/zui-chang-gong-gong-zi-xu-lie-by-leetcod-ugg7/
+     * 底下这个也是，只是套了个应用题的壳；变成数组连接线了
+     * https://leetcode.cn/problems/uncrossed-lines/solutions/787955/bu-xiang-jiao-de-xian-by-leetcode-soluti-6tqz/
+     */
+    public int longestCommonSubsequence(String text1, String text2) {
+        int len1 = text1.length();
+        int len2 = text2.length();
+        int[][] dp = new int[len1 + 1][len2 + 1];
+        for (int i = 1; i <= len1; i++) {
+            char c1 = text1.charAt(i - 1);
+            for (int j = 1; j <= len2; j++) {
+                char c2 = text2.charAt(j - 1);
+                if (c1 == c2) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[len1][len2];
+    }
+
     /**
      * 剑指 Offer 10- I. 斐波那契数列
      * 

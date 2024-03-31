@@ -1,5 +1,8 @@
 package com.leetcode.api.leetcode.baseThoughtImprove;
 
+import java.io.IOException;
+import java.util.Arrays;
+
 /**
  * 二维数组的收集
  */
@@ -63,6 +66,72 @@ public class BaseArrayMatrix {
         return res;
     }
 
+    // 定义全局变量
+    static int n, m, ans;
+    // 定义二维数组
+    static int[][] maze = new int[2005][2005];
+    static int[][] vis = new int[2005][2005];
+    // 定义向四个方向行走的数组
+    static int[][] nxt = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
+    /**
+     *Drizzle 前往山地统计大山的数目，现在收到这片区域的地图，地图中用0（平地）和1（山峰）绘制而成，请你帮忙计算其中的大山数目。
+     *
+     * 山总是被平地四面包围着，每一座山只能在水平或垂直方向上连接相邻的山峰而形成。一座山峰四面被平地包围，这个山峰也算一个大山。
+     *
+     * 另外，你可以假设地图的四面都被平地包围着。
+     *
+     * 输入格式:
+     * 第一行输入M,N分别表示地图的行列，接下来M行每行输入N个数字表示地图。
+     *
+     *
+     * 范围:
+     *
+     * 对于 5% 的数据：M，N ≤ 10
+     * 对于 100% 的数据：M，N ≤ 2000
+     *
+     * 输出格式:
+     * 输出一个整数表示大山的数目。
+     *
+     * 输入样例:
+     * 在这里给出一组输入。例如：
+     *
+     * 4 5
+     * 1 1 0 0 0
+     * 1 1 0 0 0
+     * 0 0 1 0 0
+     * 0 0 0 1 1
+     */
+    public void nums() {
+        // 遍历二维网格
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                // 如果该点没有被访问过且值为1，则进行深度优先搜索
+                if(vis[i][j] == 0 && maze[i][j] == 1){
+                    vis[i][j] = 1;
+                    dfs(i, j);
+                    // 每找到一个连通块，答案加1
+                    ans++;
+                }
+            }
+        }
+        // 输出连通块的数量
+        System.out.println(ans);
+    }
+
+    // 定义深度优先搜索的方法
+    static void dfs(int x, int y){
+        // 对四个方向进行搜索
+        for(int i = 0; i <= 3; i++){
+            int nx = x + nxt[i][0];
+            int ny = y + nxt[i][1];
+            // 如果新的点在网格内，且没有被访问过，且值为1，则继续搜索
+            if(nx >= 0 && nx <= n && ny >= 0 && ny <= m && vis[nx][ny] == 0 && maze[nx][ny] == 1){
+                vis[nx][ny] = 1;
+                dfs(nx, ny);
+            }
+        }
+    }
 
     /**
      *
@@ -456,28 +525,105 @@ public class BaseArrayMatrix {
 
     }
 
+    public static void main(String[] args) throws IOException {
+        int k = 7;
+        // 从标准输入流中读取一行数据，转换为整形数值k
+        //0, 1, 4
+        int[] nCount = new int[k];
+        // 初始化一个长度为k的数组，用于存储下标为n时，数据=[0 + (0+1) + ~ + (0+1+ ~ +n)]的值
 
-    public static void main(String[] args) {
-//        TreeNode node = new TreeNode(1);
-//        TreeNode right = new TreeNode(2);
-//        node.left = null;
-//        node.right = right;
-//        System.out.println(node.val + ' ' + (node.left != null ? node.left.val : 'null') + ' ' + node.right.val);
-//
-//        mirrorTree(node);
-//        System.out.println(node.val + ' ' + (node.left != null ? node.left.val : 'null') + ' ' + (node.right != null ? node.right.val : 'null'));
+        boolean flag = false;
+        // 初始化一个标志位，表示是否找到了符合条件的一组或多组连续正整数
 
+        for (int start = 1; start < k; start++) {
+            for (int len = 1; len < k; len++) {
+                int currentK = calK(start, len, nCount);
+                // 计算当前的currentK值
 
-//        char[][] arr = new char[][]{
-//                {'A', 'B', 'C', 'C'},
-//                {'S', 'F', 'C', 'S'},
-//                {'A', 'D', 'E', 'E'}
-//        };
-//
-//        System.out.println(exist1(arr, "ABCCED") ? "true" : "false");
+                if (currentK == k) {
+                    if (flag) System.out.print("\n");
+                    printResult(start, len, nCount);
+                    // 如果currentK等于k，打印满足条件的连续正整数序列，并将标志位设为true
 
-        System.out.println(35  % 10 +"   "+35 / 10);
+                    flag = true;
+                    break;
+                } else if (currentK > k) {
+                    break;
+                    // 如果currentK大于k，则终止内层循环
+                }
+            }
+            System.out.println(Arrays.toString(nCount));
+        }
+
+        if(!flag) {
+            System.out.println("");
+            // 如果没有找到满足条件的连续正整数序列，打印空行
+        }
     }
+
+    public static int calK(int x, int n, int[] nCount) {
+        if(nCount[n] == 0) {
+            int tmp = 0;
+            for(int i=0; i<=n; i++) tmp=tmp+i;
+            nCount[n] = nCount[n-1] + tmp;
+            // 如果nCount[n]的值为0，计算它的值并存储
+        }
+        return x*(n+1) + nCount[n];
+        // 返回计算后的currentK值
+    }
+
+    public static void printResult(int x, int n, int[] nCount) {
+        StringBuilder sb = new StringBuilder();
+        int tmp=x;
+        for(int i=0; i<=n; i++) {
+            tmp = tmp +i;
+            sb.append(tmp);
+            if(i==n) break;
+            sb.append(",");
+            // 拼接满足条件的连续正整数序列
+        }
+        System.out.print(sb);
+        // 打印满足条件的连续正整数序列
+    }
+
+//    public static void main(String[] args) {
+////        TreeNode node = new TreeNode(1);
+////        TreeNode right = new TreeNode(2);
+////        node.left = null;
+////        node.right = right;
+////        System.out.println(node.val + ' ' + (node.left != null ? node.left.val : 'null') + ' ' + node.right.val);
+////
+////        mirrorTree(node);
+////        System.out.println(node.val + ' ' + (node.left != null ? node.left.val : 'null') + ' ' + (node.right != null ? node.right.val : 'null'));
+//
+//
+////        char[][] arr = new char[][]{
+////                {'A', 'B', 'C', 'C'},
+////                {'S', 'F', 'C', 'S'},
+////                {'A', 'D', 'E', 'E'}
+////        };
+////
+////        System.out.println(exist1(arr, "ABCCED") ? "true" : "false");
+//
+////        System.out.println(Boolean.FALSE == false);
+//
+//        List<Integer> list = new ArrayList<>();
+//        list.add(5);
+//        list.add(3);
+//        list.add(1);
+//
+//        list.add(6);
+//        list.add(0,4);
+//        list.remove(1);
+//        System.out.println(Arrays.toString(list.toArray()));
+//
+//        HashMap<Character, Integer> map = new HashMap();
+//        for (Map.Entry<Character,Integer> entry:
+//             map.entrySet()
+//        ) {
+//        }
+//
+//    }
 
     /**
      * 剑指 Offer 12. 矩阵中的路径

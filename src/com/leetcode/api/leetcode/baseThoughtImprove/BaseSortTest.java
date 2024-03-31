@@ -1,11 +1,11 @@
 package com.leetcode.api.leetcode.baseThoughtImprove;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 
 /**
+ * https://www.dotcpp.com/course/156
+ *
  * 十种基础排序
  * <p>
  * 稳定排序：两个相同的数，排序之后顺序不变 ，a、b -> a、b
@@ -27,6 +27,7 @@ public class BaseSortTest {
     private static int[] bubbleSort(int[] arr) {
         int len = arr.length;
         int swapLen = len - 1;
+        
         //开始比较趟数循环
         for (int i = 0; i < len - 1; i++) {
             boolean swapFlag = false;
@@ -224,6 +225,11 @@ public class BaseSortTest {
      * 最后一个非叶子结点：len / 2 - 1
      * 左子树：k * 2 + 1
      *
+     * 1、从最后一个非叶子节点开始，递减1遍历；
+     * 2、建堆过程：
+     *      将左右子节点中的大的用来交换，
+     *      交换后的子节点也要重新和自己的子节点重新比较
+     * 3、获取堆顶数据，是将0，len-1的数据对换；然后重新建堆len-1长度
      * @param array 待排序数组
      * @return 已排序数组
      */
@@ -454,35 +460,35 @@ public class BaseSortTest {
     }
 
 
-//    public static void main(String[] args) {
-//        int[] arr = {9, 1, 0, 10, -1, 8, 5, 100, 1};
-        //1、冒泡
+    public static void main(String[] args) {
+        int[] arr = {4, 2, 8, 0, 5, 7, 1, 3, 9};
+//        1、冒泡
 //        System.out.println(Arrays.toString(bubbleSort3(arr)));
-        //2、选择
+//        2、选择
 //        System.out.println(Arrays.toString(selectSort3(arr)));
-        //3、插入
+//        3、插入
 //        System.out.println(Arrays.toString(insertSort3(arr)));
-        //4、快排
+//        4、快排
 //        int[] arr = {4, 1, 3, 0, -1};
 //        quickSort3(arr, 0, arr.length - 1);
 //        System.out.println(Arrays.toString(arr));
-        //5、希尔排序
+//        5、希尔排序
 //        System.out.println(Arrays.toString(shellSort3(arr)));
-        //6、归并
+//        6、归并
 //        System.out.println(Arrays.toString(mergeSort3(arr, 0, arr.length - 1)));
-        //7、堆排序
+//        7、堆排序
 //        int[] arr1 = {5, 2, 7, 3, 6, 1, 4};
-//        System.out.println(Arrays.toString(heapSort3(arr1)));
-        //8、计数排序
+        System.out.println(Arrays.toString(heapSort(arr)));
+//        8、计数排序
 //        System.out.println(Arrays.toString(countSort3(arr)));
-        //9、桶排序
+//        9、桶排序
 //        int[] arr = {4, 1, 3, 0, 10, 999, -1};
 //        basket(arr);
 //        System.out.println(Arrays.toString(arr));
-
+//
 //        String str = "a";
 //        System.out.println(str.substring(0, 1));
-//    }
+    }
 
 
     /**
